@@ -1,71 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    // get user
-    function getUserId() {
-      return localStorage.getItem("user_id");
-    }
-
-    // LOGIN EVENT
-    function login() {
-      var username = document.getElementById("username").value;
-
-      if (!username) {
-        alert("Please enter username");
-        return;
-      }
-
-      localStorage.setItem("user_id", username);
-
-      dataLayer.push({
-        event: "login",
-        user_id: username
-      });
-
-      alert("Login success: " + username);
-    }
-
-    // BUTTON CLICK EVENT
-    function trackButton(buttonName) {
-      dataLayer.push({
-        event: "click_button",
-        user_id: getUserId(),
-        button_name: buttonName
-      });
-
-      alert("Button clicked: " + buttonName);
-    }
-
-    // LINK CLICK EVENT
-    function trackLink(linkName) {
-      dataLayer.push({
-        event: "click_link",
-        user_id: getUserId(),
-        link_name: linkName
-      });
-    }
-  </script>
   <title>Test Tracking GTM</title>
 
-  <!-- Google Tag Manager -->
+  <!-- ① Restore user_id จาก localStorage ก่อน GTM โหลด -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    var savedUserId = localStorage.getItem('user_id');
+    if (savedUserId) {
+      dataLayer.push({ user_id: savedUserId });
+    }
+  </script>
+
+  <!-- ② Google Tag Manager -->
   <script>
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id=GTM-MFT7KX5M'+dl;
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;
     f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-MFT7KX5M');
   </script>
   <!-- End GTM -->
 
+  <!-- ③ Tracking Functions -->
+  <script>
+    function getUserId() {
+      return localStorage.getItem('user_id');
+    }
+
+    // LOGIN EVENT
+    function login() {
+      var username = document.getElementById('username').value;
+      if (!username) { alert('Please enter username'); return; }
+
+      localStorage.setItem('user_id', username);
+
+      dataLayer.push({
+        event: 'login',
+        user_id: username
+      });
+
+      alert('Login success: ' + username);
+    }
+
+    // BUTTON CLICK EVENT
+    function trackButton(buttonName) {
+      dataLayer.push({
+        event: 'click_button',
+        user_id: getUserId(),
+        button_name: buttonName
+      });
+      alert('Button clicked: ' + buttonName);
+    }
+
+    // LINK CLICK EVENT
+    function trackLink(linkName) {
+      dataLayer.push({
+        event: 'click_link',
+        user_id: getUserId(),
+        link_name: linkName
+      });
+    }
+  </script>
 </head>
 
 <body>
 
-  <!-- GTM (noscript) -->
+  <!-- GTM noscript -->
   <noscript>
     <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MFT7KX5M"
     height="0" width="0" style="display:none;visibility:hidden"></iframe>
@@ -73,25 +75,16 @@
 
   <h1>Login Page (Tracking Test)</h1>
 
-  <!-- LOGIN -->
   <input type="text" id="username" placeholder="Enter username">
   <button onclick="login()">Login</button>
 
   <hr>
 
-  <!-- BUTTON CLICK -->
-  <button onclick="trackButton('Click Me Button')">
-    Click Me
-  </button>
+  <button onclick="trackButton('Click Me Button')">Click Me</button>
 
   <br><br>
 
-  <!-- LINK CLICK -->
-  <a href="https://google.com" onclick="trackLink('Google')">
-    Go to Google
-  </a>
-
-
+  <a href="https://google.com" onclick="trackLink('Google')">Go to Google</a>
 
 </body>
 </html>
