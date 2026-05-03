@@ -3,10 +3,10 @@
 <head>
   <title>Test Tracking GTM</title>
 
-  <!-- ① Restore user_id จาก localStorage ก่อน GTM โหลด -->
+  <!-- ① Restore hashed user_id จาก localStorage ก่อน GTM โหลด -->
   <script>
     window.dataLayer = window.dataLayer || [];
-    var savedUserId = localStorage.getItem('user_id');
+    var savedUserId = localStorage.getItem('user_id_hash');
     if (savedUserId) {
       dataLayer.push({ user_id: savedUserId });
     }
@@ -25,23 +25,35 @@
 
   <!-- ③ Tracking Functions -->
   <script>
+
+    // แปลงอีเมลเป็น SHA-256 hash ก่อนส่ง GA4
+    async function hashEmail(email) {
+      var normalized = email.trim().toLowerCase();
+      var encoded = new TextEncoder().encode(normalized);
+      var hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+      var hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // ดึง hashed user_id จาก localStorage
     function getUserId() {
-      return localStorage.getItem('user_id');
+      return localStorage.getItem('user_id_hash');
     }
 
     // LOGIN EVENT
-    function login() {
-      var username = document.getElementById('username').value;
-      if (!username) { alert('Please enter username'); return; }
+    async function login() {
+      var email = document.getElementById('username').value;
+      if (!email) { alert('Please enter email'); return; }
 
-      localStorage.setItem('user_id', username);
+      var hashed = await hashEmail(email);
+      localStorage.setItem('user_id_hash', hashed);
 
       dataLayer.push({
         event: 'login',
-        user_id: username
+        user_id: hashed
       });
 
-      alert('Login success: ' + username);
+      alert('Login success: ' + email);
     }
 
     // BUTTON CLICK EVENT
@@ -75,15 +87,18 @@
 
   <h1>Login Page (Tracking Test)</h1>
 
-  <input type="text" id="username" placeholder="Enter username">
+  <!-- LOGIN -->
+  <input type="email" id="username" placeholder="Enter email">
   <button onclick="login()">Login</button>
 
   <hr>
 
+  <!-- BUTTON CLICK -->
   <button onclick="trackButton('Click Me Button')">Click Me</button>
 
   <br><br>
 
+  <!-- LINK CLICK -->
   <a href="https://google.com" onclick="trackLink('Google')">Go to Google</a>
 
 </body>
