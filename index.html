@@ -8,7 +8,7 @@
     window.dataLayer = window.dataLayer || [];
     var savedUserId = localStorage.getItem('user_id_hash');
     if (savedUserId) {
-      dataLayer.push({ user_id: savedUserId });
+      dataLayer.push({ hashed_user_id: savedUserId });
     }
   </script>
 
@@ -50,7 +50,6 @@
 
       dataLayer.push({
         event: 'login',
-        user_id: hashed,
         hashed_user_id: hashed
       });
 
