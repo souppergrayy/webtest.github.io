@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Tracking</title>
+</head>
+<body>
+  <h1>Hello Analytics</h1>
+
+  <button onclick="alert('click button')">
+    Click Me
+  </button>
+
+  <a href="https://google.com">Go to Google</a>
+</body>
+</html>
