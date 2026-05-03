@@ -31,6 +31,23 @@
   </button>
 
   <a href="https://google.com">Go to Google</a>
+  <!-- 🔧 Script -->
+  <script>
+    function login() {
+      var username = document.getElementById("username").value;
 
+      // เก็บ user
+      localStorage.setItem("user_id", username);
+
+      // ส่งเข้า dataLayer
+      window.dataLayer = window.dataLayer || [];
+      dataLayer.push({
+        event: "login",
+        user_id: username
+      });
+
+      alert("Login success: " + username);
+    }
+  </script>
 </body>
 </html>
