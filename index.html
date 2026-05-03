@@ -50,7 +50,8 @@
 
       dataLayer.push({
         event: 'login',
-        user_id: hashed
+        user_id: hashed,
+        hashed_user_id: hashed
       });
 
       alert('Login success: ' + email);
@@ -60,7 +61,7 @@
     function trackButton(buttonName) {
       dataLayer.push({
         event: 'click_button',
-        user_id: getUserId(),
+        hashed_user_id: getUserId(),
         button_name: buttonName
       });
       alert('Button clicked: ' + buttonName);
@@ -70,7 +71,7 @@
     function trackLink(linkName) {
       dataLayer.push({
         event: 'click_link',
-        user_id: getUserId(),
+        hashed_user_id: getUserId(),
         link_name: linkName
       });
     }
