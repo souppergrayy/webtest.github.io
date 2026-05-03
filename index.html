@@ -24,24 +24,34 @@
   </noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-   <h1>Login Page</h1>
+  <h1>Login Page</h1>
 
-  <input type="text" id="username" placeholder="Username">
+  <!-- LOGIN UI -->
+  <input type="text" id="username" placeholder="Enter username">
   <br><br>
 
   <button onclick="login()">
     Login
   </button>
 
-  <h1>Hello Analytics</h1>
+  <hr>
+
+  <h2>Test Section</h2>
 
   <button onclick="alert('click button')">
     Click Me
   </button>
 
-  <a href="https://google.com">Go to Google</a>
+  <br><br>
 
+  <a href="https://google.com" onclick="trackClick()">
+    Go to Google
+  </a>
+
+  <!-- SCRIPT -->
   <script>
+    window.dataLayer = window.dataLayer || [];
+
     function login() {
       var username = document.getElementById("username").value;
 
@@ -50,9 +60,10 @@
         return;
       }
 
+      // save user
       localStorage.setItem("user_id", username);
 
-      window.dataLayer = window.dataLayer || [];
+      // send to GTM dataLayer
       dataLayer.push({
         event: "login",
         user_id: username
@@ -60,6 +71,14 @@
 
       alert("Login success: " + username);
     }
+
+    function trackClick() {
+      dataLayer.push({
+        event: "click_link",
+        link_name: "Google"
+      });
+    }
   </script>
+
 </body>
 </html>
