@@ -24,6 +24,15 @@
   </noscript>
   <!-- End Google Tag Manager (noscript) -->
 
+   <h1>Login Page</h1>
+
+  <input type="text" id="username" placeholder="Username">
+  <br><br>
+
+  <button onclick="login()">
+    Login
+  </button>
+
   <h1>Hello Analytics</h1>
 
   <button onclick="alert('click button')">
@@ -31,15 +40,18 @@
   </button>
 
   <a href="https://google.com">Go to Google</a>
-  <!-- 🔧 Script -->
+
   <script>
     function login() {
       var username = document.getElementById("username").value;
 
-      // เก็บ user
+      if (!username) {
+        alert("Please enter username");
+        return;
+      }
+
       localStorage.setItem("user_id", username);
 
-      // ส่งเข้า dataLayer
       window.dataLayer = window.dataLayer || [];
       dataLayer.push({
         event: "login",
